@@ -181,7 +181,6 @@
 /workspaces/CodespaceTest/precall_automation/bin/Release/net8.0/win-x64/hostfxr.dll
 /workspaces/CodespaceTest/precall_automation/bin/Release/net8.0/win-x64/hostpolicy.dll
 /workspaces/CodespaceTest/precall_automation/bin/Release/net8.0/win-x64/mscordaccore.dll
-/workspaces/CodespaceTest/precall_automation/bin/Release/net8.0/win-x64/mscordaccore_amd64_amd64_8.0.1825.31117.dll
 /workspaces/CodespaceTest/precall_automation/bin/Release/net8.0/win-x64/mscordbi.dll
 /workspaces/CodespaceTest/precall_automation/bin/Release/net8.0/win-x64/mscorrc.dll
 /workspaces/CodespaceTest/precall_automation/bin/Release/net8.0/win-x64/msquic.dll
@@ -196,3 +195,4 @@
 /workspaces/CodespaceTest/precall_automation/obj/Release/net8.0/win-x64/precall_automation.pdb
 /workspaces/CodespaceTest/precall_automation/obj/Release/net8.0/win-x64/precall_automation.genruntimeconfig.cache
 /workspaces/CodespaceTest/precall_automation/obj/Release/net8.0/win-x64/ref/precall_automation.dll
+/workspaces/CodespaceTest/precall_automation/bin/Release/net8.0/win-x64/mscordaccore_amd64_amd64_8.0.2125.47513.dll

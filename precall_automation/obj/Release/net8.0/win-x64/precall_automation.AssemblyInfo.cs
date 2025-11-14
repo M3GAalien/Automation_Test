@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("precall_automation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e2fb8b11920aba66f090f921c5f8b12a565b37f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+865c77cd258b1d0ed3b2caf80280d8cb28041735")]
 [assembly: System.Reflection.AssemblyProductAttribute("precall_automation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("precall_automation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
