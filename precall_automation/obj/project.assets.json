@@ -433,7 +433,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "puppeteersharp >= 20.2.4"
+      "PuppeteerSharp >= 20.2.4"
     ]
   },
   "packageFolders": {
@@ -478,7 +478,7 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
-          "puppeteersharp": {
+          "PuppeteerSharp": {
             "target": "Package",
             "version": "[20.2.4, )"
           }

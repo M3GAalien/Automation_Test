@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using PuppeteerSharp;
+﻿using PuppeteerSharp;;
 
 bool debug = true;
 Console.WriteLine("Enter your name");

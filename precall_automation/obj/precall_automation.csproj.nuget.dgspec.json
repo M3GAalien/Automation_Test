@@ -43,7 +43,7 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "puppeteersharp": {
+            "PuppeteerSharp": {
               "target": "Package",
               "version": "[20.2.4, )"
             }
