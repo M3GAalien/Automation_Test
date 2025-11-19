@@ -1,7 +1,7 @@
 ﻿using TextCopy;
 
 
-bool debug = true;// not allowed to do threads in github codespaces #########SET FALSE BEFORE BUILDING##########
+bool debug = false;// not allowed to do threads in github codespaces #########SET FALSE BEFORE BUILDING##########
 Console.WriteLine("Drop the Excel pls good sir");
 Console.WriteLine("Press Enter to continue");
 
