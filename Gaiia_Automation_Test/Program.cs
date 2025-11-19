@@ -33,7 +33,6 @@ foreach (Account a in accounts)
 
     Console.WriteLine($"Output copied to clipboard: {text}");
 }
-
-Console.ReadLine();
-Console.ReadLine();
+int oneSecond = 1000;
+Thread.Sleep(oneSecond * 3);
 Console.ReadLine();
