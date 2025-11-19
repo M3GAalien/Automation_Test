@@ -33,3 +33,5 @@ foreach (Account a in accounts)
 
     Console.WriteLine($"Output copied to clipboard: {text}");
 }
+
+Console.ReadLine();
