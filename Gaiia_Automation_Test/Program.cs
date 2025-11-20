@@ -4,8 +4,8 @@ using TextCopy;
 
 
 
-bool debug = false; // SET FALSE BEFORE BUILDING - not allowed to do threads in github codespaces 
-bool slowMode = true; // add timed delays for *asthetic* reasons
+bool debug = true; // SET FALSE BEFORE BUILDING - not allowed to do threads in github codespaces 
+bool slowMode = false; // add timed delays for *asthetic* reasons
 int delay = 2000; // delay to add in miliseconds
 
 #region intro
@@ -86,7 +86,7 @@ foreach (Account a in accounts)
 
     #region Copy note to leave in Gaiia account
     if (slowMode) Thread.Sleep(delay);
-    Console.WriteLine("\nResolution:\n\t(1) Confirmed\n\t(2) Voicemail");
+    Console.WriteLine("\nResolution:\n   (1) Confirmed\n   (2) Voicemail");
     a.Resolution = getChoice(1, 2) == 1 ? "Confirmed" : "Voicemail";
 
     #region Format account note
@@ -129,8 +129,8 @@ RESULT: Pending Installation";
     #endregion
 
     if (slowMode) Thread.Sleep(delay);
-    Console.WriteLine("\nPress any key to continue");
-    Console.ReadKey();
+    Console.WriteLine("\nPress ENTER to continue");
+    Console.ReadLine();
 }
 
 #region Copy results to leave in Excel
@@ -161,8 +161,8 @@ Console.WriteLine("\nExcel output copied to clipboad.");
 if (slowMode) Thread.Sleep(delay);
 Console.WriteLine("\n\nALL DONE: YIPEEE");
 if (slowMode) Thread.Sleep(delay);
-Console.WriteLine("Press any key to exit");
-Console.ReadKey();
+Console.WriteLine("Press ENTER to exit");
+Console.ReadLine();
 
 
 
@@ -171,16 +171,22 @@ int getChoice(int choice1, int choice2)
 {
     int choice = -1;
     bool invalidChoice = true;
+    
+
     do
     {
+        int errorTop = Console.CursorTop;
+        Console.Error.WriteLine(errorTop);
         try
         {
-            choice = int.Parse(Console.ReadKey(true).KeyChar.ToString() ?? "-1");
+            choice = int.Parse(Console.ReadLine() ?? "-1");
         }
         catch (Exception e)
         {
             Console.WriteLine("Whoopsie Tootsie: " + e.Message);
+            choice = -99;
         }
+
         if (choice == choice1 || choice == choice2)
         {
             invalidChoice = false;
@@ -191,14 +197,28 @@ int getChoice(int choice1, int choice2)
             if (slowMode) Thread.Sleep(delay);
 
             // clear last message
-            int lastCursorPosition = 17;
-            if (debug)
+            // int lastCursorPosition = 16;
+            // if (debug)
+            // {
+            //     lastCursorPosition = 13;
+            // }
+            // if (choice == -99) lastCursorPosition -= 1;
+            // Console.SetCursorPosition(0, lastCursorPosition);
+            // Console.WriteLine(new string(' ', 100));
+            // Console.WriteLine(new string(' ', 100));
+            // if (choice == -99) Console.WriteLine(new string(' ', 100));
+            // Console.SetCursorPosition(0, lastCursorPosition);
+            
+            int linesToErase = choice == -99 ? 2 : 1;
+
+            for (int i = 0; i < linesToErase + 1; i++)
             {
-                lastCursorPosition = 14;
+                Console.SetCursorPosition(0, errorTop + i);
+                Console.WriteLine(new string(' ', Console.WindowWidth));
             }
-            Console.SetCursorPosition(0, lastCursorPosition);
-            Console.WriteLine(new string(' ', 100));
-            Console.SetCursorPosition(0, lastCursorPosition);
+
+            Console.SetCursorPosition(0, errorTop);
+
         }
     } while (invalidChoice);
     return choice;
