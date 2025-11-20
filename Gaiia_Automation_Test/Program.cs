@@ -1,7 +1,7 @@
 ﻿using TextCopy;
 
 
-bool debug = false;// not allowed to do threads in github codespaces #########SET FALSE BEFORE BUILDING##########
+bool debug = true;// not allowed to do threads in github codespaces #########SET FALSE BEFORE BUILDING##########
 Console.WriteLine("Drop the Excel pls good sir");
 Console.WriteLine("Press Enter to continue");
 
@@ -44,11 +44,15 @@ foreach (Account a in accounts)
 
     // Copy number to clipboard to paste in NICE
     string text = a.PhoneNumber;
-    if (debug){
-        Console.WriteLine($"Output copied to clipboard:\n{text}");
-    } else {
+    if (debug)
+    {
+        Console.WriteLine($"\n{text}");
+    }
+    else
+    {
         await ClipboardService.SetTextAsync(text);
     }
+    Console.WriteLine("Phone Number copied to clipboard!");
 
     // Copy note to leave in Gaiia account
     Console.WriteLine("\nResolution:\n\t(1) Confirmed\n\t(2) Voicemail");
@@ -84,12 +88,13 @@ RESULT: Pending Installation";
 
     if (debug)
     {
-        Console.WriteLine($"Output copied to clipboard:\n{text}");
+        Console.WriteLine($"\n{text}");
     }
     else
     {
         await ClipboardService.SetTextAsync(text);
     }
+    Console.WriteLine("Gaiia note copied to clipboard!");
 
     Thread.Sleep(1000);
     Console.WriteLine("\nPress any key to continue");
@@ -111,7 +116,8 @@ int getChoice(int choice1, int choice2)
         try
         {
             choice = int.Parse(Console.ReadKey(true).KeyChar.ToString() ?? "-1");
-        }catch(Exception e)
+        }
+        catch (Exception e)
         {
             Console.WriteLine("Whoopsie Tootsie: " + e.Message);
         }

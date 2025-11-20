@@ -1,6 +1,8 @@
 # CodespaceTest
 testing github codespaces
 
+<details>
+  <summary>Click to expand</summary>
 
 ## Command to auto publish and commit code ##
 
@@ -9,3 +11,6 @@ mv ./Gaiia_Automation_Test/bin/Release/net8.0/win-x64/publish/Gaiia_Automation_T
 git add .
 git commit -m "Automated commit"
 git push
+
+</details>
+
