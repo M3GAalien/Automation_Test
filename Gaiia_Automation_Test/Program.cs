@@ -1,9 +1,22 @@
-﻿using TextCopy;
+﻿using System.Text;
+using System.Reflection;
+using TextCopy;
 
 
-bool debug = true;// not allowed to do threads in github codespaces #########SET FALSE BEFORE BUILDING##########
-Console.WriteLine("Drop the Excel pls good sir");
-Console.WriteLine("Press Enter to continue");
+
+bool debug = false; // SET FALSE BEFORE BUILDING - not allowed to do threads in github codespaces 
+bool slowMode = true; // add timed delays for *asthetic* reasons
+int delay = 1000; // delay to add in miliseconds
+
+#region intro
+Console.WriteLine("this program does blah blah blah...");
+Console.Write("your name pls: ");
+string agent = debug ? "Michael A" : Console.ReadLine() ?? "NO NAME";
+#endregion
+
+#region get info from Excel
+if (slowMode) Thread.Sleep(delay);
+Console.WriteLine("\nDrop the Excel pls good sir then press Enter to continue");
 
 string input;
 List<Account> accounts = new List<Account>();
@@ -12,7 +25,7 @@ do
     input = Console.ReadLine() ?? "";
     try
     {
-        accounts.Add(new Account(input.Split("\t")));
+        accounts.Add(new Account(input.Split("\t"), agent));
     }
     catch (Exception e)
     {
@@ -22,13 +35,16 @@ do
         }
     }
 } while (input != "");
+#endregion
 
 var client = new HttpClient();
 string url = @"https://app.gaiia.com/iq-fiber/accounts/";
 
 foreach (Account a in accounts)
 {
-    // Display info to console
+    #region Display info to console
+    Console.WriteLine("Getting account....");
+    if (slowMode) Thread.Sleep(delay);
     Console.Clear();
     Console.WriteLine($"PROGRESS: {accounts.IndexOf(a) + 1} of {accounts.Count()}\n");
     string message = @$"Account Info:
@@ -38,25 +54,40 @@ foreach (Account a in accounts)
 
     NAME----------{a.FirstName} {a.LastName}
     ADDRESS-------{a.Address}
-    INSTALL TIME--{a.InstallTime}
+    INSTALL TIME--{a.reformatedInstallTime()}
     SUBSCRIPTION--{a.Subsciption}";
     Console.WriteLine(message);
+    #endregion
 
-    // Copy number to clipboard to paste in NICE
+    #region Copy number to clipboard to paste in NICE
+    if (slowMode) Thread.Sleep(delay);
     string text = a.PhoneNumber;
-    if (debug)
+
+    if (string.IsNullOrWhiteSpace(text))
     {
-        Console.WriteLine($"\n{text}");
+        Console.WriteLine("\nError getting phone number." +
+                          "\nPlease use Gaiia to get the phone number");
     }
     else
     {
-        await ClipboardService.SetTextAsync(text);
-    }
-    Console.WriteLine("Phone Number copied to clipboard!");
 
-    // Copy note to leave in Gaiia account
+        if (debug)
+        {
+            Console.WriteLine($"\n{text}");
+        }
+        else
+        {
+            await ClipboardService.SetTextAsync(text);
+            Console.WriteLine("\nPhone Number copied to clipboard!");
+        }
+    }
+
+    #endregion
+
+    #region Copy note to leave in Gaiia account
+    if (slowMode) Thread.Sleep(delay);
     Console.WriteLine("\nResolution:\n\t(1) Confirmed\n\t(2) Voicemail");
-    int choice = getChoice(1, 2);
+    a.Resolution = getChoice(1, 2) == 1 ? "Confirmed" : "Voicemail";
 
     #region Format account note
     text = @"ISSUE: PRE-CALL
@@ -65,13 +96,13 @@ ACTION:
 *   Vetro ID verified & called the customer
 *   ";
 
-    switch (choice)
+    switch (a.Resolution)
     {
-        case 1:
+        case "Confirmed":
             text += "Confirmed ";
             break;
-        case 2:
-            text += "Left voicemail informing of ";
+        case "Voicemail":
+            text += "Left voicemail informing of the ";
             break;
         default:
             text += "Informed the customer of the ";
@@ -80,7 +111,7 @@ ACTION:
 
     text += $@"installation details:
 *   {a.Address}
-*   {a.InstallTime}
+*   {a.reformatedInstallTime()}
 *   {a.Subsciption}
 
 RESULT: Pending Installation";
@@ -94,16 +125,45 @@ RESULT: Pending Installation";
     {
         await ClipboardService.SetTextAsync(text);
     }
-    Console.WriteLine("Gaiia note copied to clipboard!");
+    Console.WriteLine("\nGaiia note copied to clipboard!");
+    #endregion
 
-    Thread.Sleep(1000);
+    if (slowMode) Thread.Sleep(delay);
     Console.WriteLine("\nPress any key to continue");
     Console.ReadKey();
 }
+
+#region Copy results to leave in Excel
+Console.Clear();
+Console.WriteLine("Getting results for Excel....");
+
+if (slowMode) Thread.Sleep(delay);
+StringBuilder excelOuput = new StringBuilder();
+foreach (Account a in accounts)
+{
+    string output = string.Join("\t",
+    a.GetType()
+    .GetFields(BindingFlags.Public | BindingFlags.Instance)
+    .Select(x => x.GetValue(a)?.ToString())) + "\n";
+    excelOuput.Append(output);
+}
+if (debug)
+{
+    Console.WriteLine(excelOuput);
+}
+else
+{
+    await ClipboardService.SetTextAsync(excelOuput.ToString());
+}
+Console.WriteLine("\nExcel output copied to clipboad.");
+#endregion
+
+if (slowMode) Thread.Sleep(delay);
 Console.WriteLine("\n\nALL DONE: YIPEEE");
-Thread.Sleep(1000);
+if (slowMode) Thread.Sleep(delay);
 Console.WriteLine("Press any key to exit");
 Console.ReadKey();
+
 
 
 
@@ -128,7 +188,7 @@ int getChoice(int choice1, int choice2)
         else
         {
             Console.WriteLine("Invalide choice: Please try again");
-            Thread.Sleep(1000);
+            if (slowMode) Thread.Sleep(delay);
 
             // clear last message
             Console.SetCursorPosition(0, 14);

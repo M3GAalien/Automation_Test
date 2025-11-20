@@ -7,8 +7,10 @@ public class Account
     public string Subsciption;
     public string Address;
     public string InstallTime;
+    public string? Resolution;
+    public string Agent; 
 
-    public Account(string[] accountInfo)
+    public Account(string[] accountInfo, string agent)
     {
         AccountNumber = int.Parse(accountInfo[0]);
         FirstName = accountInfo[1];
@@ -16,7 +18,8 @@ public class Account
         PhoneNumber = accountInfo[3];
         Subsciption = accountInfo[4];
         Address = accountInfo[5];
-        InstallTime = reformatInstallTime(accountInfo[6]);
+        InstallTime = accountInfo[6];
+        Agent = agent;
     }
 
     public override string ToString()
@@ -24,9 +27,9 @@ public class Account
         return $"{AccountNumber} {FirstName} {LastName} {PhoneNumber} {Subsciption} {Address} {InstallTime}";
     }
 
-    private string reformatInstallTime(string installTime)
+    public string reformatedInstallTime()
     {
-        DateTime start = DateTime.Parse(installTime);
+        DateTime start = DateTime.Parse(InstallTime);
         DateTime end = start.AddHours(3);
 
         // Build formatted string
