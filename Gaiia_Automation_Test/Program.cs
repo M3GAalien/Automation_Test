@@ -191,7 +191,7 @@ int getChoice(int choice1, int choice2)
             if (slowMode) Thread.Sleep(delay);
 
             // clear last message
-            int lastCursorPosition = 14;
+            int lastCursorPosition = 17;
             if (debug)
             {
                 lastCursorPosition = 14;
