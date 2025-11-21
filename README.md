@@ -1,7 +1,6 @@
 # CodespaceTest
-testing github codespaces
-michael
-ethan
+Testing github codespaces
+
 
 <details>
   <summary>Click to expand</summary>
