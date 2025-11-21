@@ -225,6 +225,7 @@ int getChoice(int range)
     return choice;
 }
 
+// show results if in debug mode or send text straight to clipboard 
 async void results(bool isInDebugMode, bool isInSlowMode, int delay, string text)
 {
     if (isInDebugMode)
