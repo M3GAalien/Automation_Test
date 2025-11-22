@@ -10,6 +10,11 @@ Testing github codespaces
 mv ./Gaiia_Automation_Test/bin/Release/net8.0/win-x64/publish/Gaiia_Automation_Test.exe ./Program
 git add .
 git commit -m "Automated commit"
+git push origin main
+git checkout main
+git merge Michael
+git add .
+git commit -m "Automated commit"
 git push origin main`
 
 </details>
