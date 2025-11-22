@@ -5,7 +5,7 @@ using TextCopy;
 
 bool debug = false; // SET FALSE BEFORE BUILDING - not allowed to do threads in github codespaces 
 bool slowMode = true; // add timed delays for *asthetic* reasons
-int delay = 2000; // delay to add in miliseconds
+int delay = 1000; // delay to add in miliseconds
 
 #region intro
 Console.WriteLine("this program does blah blah blah...");
@@ -259,7 +259,9 @@ async void results(bool isInDebugMode, bool isInSlowMode, int delay, string text
     else
     {
         await ClipboardService.SetTextAsync(text);
-        Console.WriteLine("\nCopied to clipboard!");
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.WriteLine("Copied to clipboard!");
+        Console.ResetColor();
     }
     if (isInSlowMode) Thread.Sleep(delay);
     Console.WriteLine("\nPress ENTER to continue");
