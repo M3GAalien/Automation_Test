@@ -3,9 +3,9 @@ using System.Reflection;
 using TextCopy;
 
 
-bool debug = false; // SET FALSE BEFORE BUILDING - not allowed to do threads in github codespaces 
-bool slowMode = true; // add timed delays for *asthetic* reasons
-int delay = 500; // delay to add in miliseconds
+bool debug = true; // SET FALSE BEFORE BUILDING - not allowed to do threads in github codespaces 
+bool slowMode = false; // add timed delays for *asthetic* reasons
+int delay = 2000; // delay to add in miliseconds
 
 #region intro
 Console.WriteLine("this program does blah blah blah...");
@@ -50,21 +50,14 @@ foreach (Account a in accounts)
     Console.WriteLine("Getting account....");
     if (slowMode) Thread.Sleep(delay);
     Console.Clear();
-    Console.WriteLine($"PROGRESS: {accounts.IndexOf(a) + 1} of {accounts.Count()}\n");
-    string text = @$"Account Info:
-    #############################################
-    {url + a.AccountNumber}
-    #############################################
 
-    NAME----------{a.FirstName} {a.LastName}
-    ADDRESS-------{a.Address}
-    INSTALL TIME--{a.reformatedInstallTime()}
-    SUBSCRIPTION--{a.Subsciption}";
-    Console.WriteLine(text);
+    Console.WriteLine($"PROGRESS: {accounts.IndexOf(a) + 1} of {accounts.Count()}\n");
+    string text = "";
+    printAccountInfo(a, url);
     #endregion
 
     #region Copy number to clipboard to paste in NICE
-    Console.WriteLine("Getting phone number....");
+    Console.WriteLine("\nGetting phone number....");
     if (slowMode) Thread.Sleep(delay);
     text = a.PhoneNumber;
 
@@ -81,60 +74,91 @@ foreach (Account a in accounts)
 
     #region Copy note to leave in Gaiia account
     if (slowMode) Thread.Sleep(delay);
-    Console.WriteLine("\nResolution:\n   (1) Confirmed\n   (2) Voicemail\n   (3) Email");
-    a.Resolution = getChoice(3) switch
+    Console.WriteLine("Resolution:");
+
+    // color choices
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("   (1) Confirmed");
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("   (2) Voicemail");
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("   (3) Email");
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine("   (4) Reschedule");
+    Console.ForegroundColor = ConsoleColor.DarkRed;
+    Console.WriteLine("   (5) Canceled");
+    Console.ResetColor();
+
+    int resolution = getChoice(5);
+    if (resolution <= 3)
     {
-        1 => "Confirmed",
-        2 => "Voicemail",
-        3 => "Emailed",
-        _ => "ERROR"
-    };
+        a.Resolution = resolution switch
+        {
+            1 => "Confirmed",
+            2 => "Voicemail",
+            3 => "Emailed",
+            _ => "ERROR"
+        };
+    }
+    else
+    {
+        a.CXLorRS = resolution switch
+        {
+            4 => "Rescheduled",
+            5 => "Canceled",
+            _ => "ERROR"
+        };
+    }
+
 
     #region Format account note
-    Console.WriteLine("Formating note for Gaiia....");
-    if (slowMode) Thread.Sleep(delay);
-    text = @"ISSUE: PRE-CALL
+    if (a.CXLorRS != "Rescheduled" && a.CXLorRS != "Canceled")
+    {
+        Console.WriteLine("Formating note for Gaiia....");
+        if (slowMode) Thread.Sleep(delay);
+        text = @"ISSUE: PRE-CALL
 	
 ACTION: 
     Vetro ID verified & called the customer
     ";
 
-    switch (a.Resolution)
-    {
-        case "Confirmed":
-            text += "Confirmed ";
-            break;
-        case "Voicemail":
-            text += "Left voicemail informing of ";
-            break;
-        case "Emailed":
-            text += "Sent an email informing of ";
-            break;
-        default:
-            text += "Informed the customer of ";
-            break;
-    }
+        switch (a.Resolution)
+        {
+            case "Confirmed":
+                text += "Confirmed ";
+                break;
+            case "Voicemail":
+                text += "Left voicemail informing of ";
+                break;
+            case "Emailed":
+                text += "Sent an email informing of ";
+                break;
+            default:
+                text += "Informed the customer of ";
+                break;
+        }
 
-    text += $@"the installation details:
+        text += $@"the installation details:
     *   {a.Address}
     *   {a.reformatedInstallTime()}
     *   {a.Subsciption}
 
 RESULT: Pending Installation";
-    results(debug, slowMode, delay, text);
-    #endregion
+        results(debug, slowMode, delay, text);
+        #endregion
+    }
     #endregion
 
     #region Send an email if necessary
     if (a.Resolution == "Emailed")
     {
         Console.WriteLine("Formatting email....");
-        if(slowMode) Thread.Sleep(delay);
+        if (slowMode) Thread.Sleep(delay);
 
         text = @$"Hi {a.FirstName},
 Just wanted to confirm the details of your installation 
     Where : {a.Address},
-    When  : {a.reformatedInstallTime}.
+    When  : {a.reformatedInstallTime()}.
     Plan  : {a.Subsciption}.
 
 The technicians will call when they are on the way.
@@ -150,10 +174,10 @@ Best regards,";
 }
 
 #region Copy results to leave in Excel
-Console.Clear();
 Console.WriteLine("Getting results for Excel....");
-
 if (slowMode) Thread.Sleep(delay);
+Console.Clear();
+
 StringBuilder excelOuput = new StringBuilder();
 foreach (Account a in accounts)
 {
@@ -240,4 +264,49 @@ async void results(bool isInDebugMode, bool isInSlowMode, int delay, string text
     if (isInSlowMode) Thread.Sleep(delay);
     Console.WriteLine("\nPress ENTER to continue");
     Console.ReadLine();
+}
+
+void printAccountInfo(Account a, string url)
+{
+
+    ConsoleColor borderColor = ConsoleColor.DarkGray;
+    ConsoleColor urlColor = ConsoleColor.Blue;
+    ConsoleColor labelColor = ConsoleColor.Yellow;
+    ConsoleColor dashColor = ConsoleColor.DarkGray;
+    ConsoleColor valueColor = ConsoleColor.Cyan;
+
+    Console.WriteLine("Account Info:");
+
+    writeBorder();
+    Console.ForegroundColor = urlColor;
+    Console.WriteLine(url + a.AccountNumber);
+    Console.ResetColor();
+    writeBorder();
+
+    printField("NAME", $"{a.FirstName} {a.LastName}");
+    printField("ADDRESS", a.Address);
+    printField("INSTALL TIME", a.reformatedInstallTime());
+    printField("SUBSCRIPTION", a.Subsciption);
+
+    void writeBorder(char borderCharacter = '#', int borderLength = 45)
+    {
+        Console.ForegroundColor = borderColor;
+        Console.WriteLine(new string(borderCharacter, borderLength));
+        Console.ResetColor();
+    }
+
+    void printField(string label, string value, int labelBlockWidth = 15)
+    {
+        Console.ForegroundColor = labelColor;
+        Console.Write(label);
+
+        int fillerLength = labelBlockWidth - label.Length;
+
+        Console.ForegroundColor = dashColor;
+        Console.Write(new string('-', fillerLength));
+
+        Console.ForegroundColor = valueColor;
+        Console.WriteLine(value);
+        Console.ResetColor();
+    }
 }

@@ -7,7 +7,7 @@ public class Account
     public string Subsciption;
     public string Address;
     public string InstallTime;
-    public string? Resolution;
+    public string Resolution = "";
     public string CXLorRS = "";
     public string Agent; 
 
