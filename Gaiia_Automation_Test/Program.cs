@@ -3,8 +3,8 @@ using System.Reflection;
 using TextCopy;
 
 
-bool debug = true; // SET FALSE BEFORE BUILDING - not allowed to do threads in github codespaces 
-bool slowMode = false; // add timed delays for *asthetic* reasons
+bool debug = false; // SET FALSE BEFORE BUILDING - not allowed to do threads in github codespaces 
+bool slowMode = true; // add timed delays for *asthetic* reasons
 int delay = 2000; // delay to add in miliseconds
 
 #region intro
