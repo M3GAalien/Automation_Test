@@ -126,13 +126,11 @@ foreach (Account a in accounts)
 results(debug, slowMode, delay, excelOuput.ToString());
 #endregion
 
-if (slowMode) Thread.Sleep(delay);
 Console.ForegroundColor = success;
 text = "ALL DONE: YIPEEE\n";
 typeText(text, slowMode);
 Console.ResetColor();
 
-if (slowMode) Thread.Sleep(delay);
 Console.WriteLine("Press ENTER to exit");
 Console.ReadLine();
 
@@ -262,31 +260,35 @@ void printAccountInfo(Account a, string url)
 // check if need to change call resolution in Gaiia
 bool goBack(string task, Account account)
 {
-    typeText("Need to change resolution?\n",slowMode);
+    typeText("Need to change resolution?\n", slowMode);
     Console.ForegroundColor = notification;
     Console.WriteLine("     (1) NO");
     Console.WriteLine("     (2) YES");
     Console.ResetColor();
-    switch (task) // reset resolution to default settings
+    bool result = getChoice(2) == 1 ? false : true;
+    if (result)
     {
-        case "precall":
-            account.Resolution = "";
-            account.CXLorRS = "";
-            break;
-        case "wellness check":
-            account.WellnessCheckResolution = "";
-            account.WellnessCheckStatus = "";
-            break;
-        default:
-            break;
+        switch (task) // reset resolution to default settings
+        {
+            case "precall":
+                account.Resolution = "";
+                account.CXLorRS = "";
+                break;
+            case "wellness check":
+                account.WellnessCheckResolution = "";
+                account.WellnessCheckStatus = "";
+                break;
+            default:
+                break;
+        }
     }
-    return getChoice(2) == 1 ? false : true;
+    return result;
 }
 
 void precall(Account account)
 {
     #region Copy note to leave in Gaiia
-    typeText("\nResolution:\n",slowMode);
+    typeText("\nResolution:\n", slowMode);
 
     // color choices
     Console.ForegroundColor = success;
@@ -367,7 +369,7 @@ RESULT: Pending Installation";
     if (account.Resolution.Contains("Emailed"))
     {
         text = "Formatting email....\n";
-        typeText(text,slowMode);
+        typeText(text, slowMode);
         if (slowMode) Thread.Sleep(delay);
 
         text = @$"Hi {account.FirstName},
