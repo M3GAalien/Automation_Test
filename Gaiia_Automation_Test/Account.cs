@@ -10,7 +10,7 @@ public class Account
     public string Resolution;
     public string CXLorRS;
     public string Agent;
-
+    public string BLANK = ""; // always blank
     public string WellnessCheckResolution = "";
     public string WellnessCheckAgent;
     public string WellnessCheckStatus = "";
