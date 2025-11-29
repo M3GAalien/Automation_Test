@@ -7,11 +7,15 @@ public class Account
     public string Subsciption;
     public string Address;
     public string InstallTime;
-    public string Resolution = "";
-    public string CXLorRS = "";
-    public string Agent; 
+    public string Resolution;
+    public string CXLorRS;
+    public string Agent;
 
-    public Account(string[] accountInfo, string agent)
+    public string WellnessCheckResolution = "";
+    public string WellnessCheckAgent;
+    public string WellnessCheckStatus = "";
+
+    public Account(string[] accountInfo, string agent, string task)
     {
         AccountNumber = int.Parse(accountInfo[0]);
         FirstName = accountInfo[1];
@@ -20,12 +24,22 @@ public class Account
         Subsciption = reformatSubscription(accountInfo[4]);
         Address = accountInfo[5];
         InstallTime = accountInfo[6];
-        Agent = agent;
+        Resolution = task.Contains("precall") ? "" : accountInfo[7];
+        CXLorRS = task.Contains("precall") ? "" : accountInfo[8];
+        Agent = task.Contains("precall") ? agent : accountInfo[9];
+        WellnessCheckAgent = task.Contains("wellness check") ? agent : "";
     }
 
     public override string ToString()
     {
-        return $"{AccountNumber} {FirstName} {LastName} {PhoneNumber} {Subsciption} {Address} {InstallTime}";
+        return @$"{AccountNumber} {FirstName} {LastName} {PhoneNumber} {Subsciption} 
+        {Address}
+        {InstallTime} 
+        {Resolution} {CXLorRS} 
+        {Agent} 
+        {WellnessCheckResolution} 
+        {WellnessCheckAgent} 
+        {WellnessCheckStatus}";
     }
 
     public string reformatedInstallTime()
@@ -87,6 +101,6 @@ public class Account
             }
             return "5 Gig. for $125/Month";
         }
-        return "PLEASE CHECK GAIIA FOR SUBSCRIPTION DETAILS";
+        return "";
     }
 }
