@@ -105,7 +105,6 @@ foreach (Account a in accounts)
                 break;
         }
     } while (goBack(task, a));
-
 }
 
 #region Copy results to leave in Excel
@@ -289,6 +288,7 @@ bool goBack(string task, Account account)
     return result;
 }
 
+// precall workflow
 void precall(Account account)
 {
     #region Copy note to leave in Gaiia
@@ -394,6 +394,7 @@ RESULT: Pending Installation";
     #endregion
 }
 
+// wellness check workflow
 void wellnessCheck(Account account)
 {
     #region Copy note to leave in Gaiia
@@ -486,6 +487,7 @@ RESULT: DONE";
     #endregion
 }
 
+// types each character to terminal
 void typeText(string text, bool slowMode)
 {
     if (slowMode)
@@ -502,6 +504,7 @@ void typeText(string text, bool slowMode)
     }
 }
 
+// search text for keywords to replace with account info
 string replaceText(string text, Account account)
 {
     text = text.Replace("#ACCNUM", account.AccountNumber.ToString());
