@@ -335,12 +335,8 @@ void precall(Account account)
         text = "Formating note for Gaiia account....\n";
         typeText(text, slowMode);
         if (slowMode) Thread.Sleep(delay);
-        text = @"ISSUE: PRE-CALL
-
-ACTION: 
-Vetro ID verified & called the customer
-";
-
+        text = "ISSUE: PRE-CALL" +
+          "\n\nACTION:\nVetro ID verified & called the customer. ";
 
         switch (account.Resolution)
         {
@@ -358,12 +354,11 @@ Vetro ID verified & called the customer
                 break;
         }
 
-        text += $@"the installation details:
-*   {account.Address}
-*   {account.reformatedInstallTime()}
-*   {account.Subsciption}
-
-RESULT: Pending Installation";
+        text += $"the installation details:" +
+                "\n*\t{account.Address}" +
+                "\n*\t{account.reformatedInstallTime()}" +
+                "\n*\t{account.Subsciption}" +
+                "\n\nRESULT: Pending Installation";
         results(debug, slowMode, delay, text);
     }
     #endregion
