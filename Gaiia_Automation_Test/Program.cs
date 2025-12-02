@@ -377,23 +377,21 @@ RESULT: Pending Installation";
         typeText(text, slowMode);
         if (slowMode) Thread.Sleep(delay);
 
-        text = @$"Hi {account.FirstName},
-Just wanted to confirm the details of your installation 
-Where : {account.Address},
-When  : {account.reformatedInstallTime()}.
-Plan  : {account.Subsciption}.
+        try
+        {
+            text = File.ReadAllText("../Program/precall_email.txt");
+        }
+        catch (Exception e)
+        {
+            Console.ForegroundColor = error;
+            Console.WriteLine(e.Message);
+            Console.ResetColor();
+        }
 
-The technicians will call when they are on the way.
-Please make sure someone 18 or older is home for the full appointment, any pets are secured, and any gates needed for access are opened.
-
-If you need to reschedule or have any questions, please reach out.
-We look forward to getting you connected!
-
-Best regards,";
+        text = replaceText(text, account);
         results(debug, slowMode, delay, text);
     }
     #endregion
-
 }
 
 void wellnessCheck(Account account)
@@ -446,17 +444,17 @@ ACTION: ";
         switch (account.WellnessCheckResolution)
         {
             case "Satisfied":
-                text += "Confirmed good ";
+                text += "Confirmed good";
                 break;
             case "Emailed + VM":
-                text += "Left voicemail and sent an email inquiring of";
+                text += "Left voicemail & email inquiring of";
                 break;
             default:
-                text += "Requested feedback on ";
+                text += "Requested feedback on";
                 break;
         }
 
-        text += $@"service
+        text += $@" install/service
 
 RESULT: DONE";
         results(debug, slowMode, delay, text);
@@ -469,21 +467,21 @@ RESULT: DONE";
     if (account.WellnessCheckResolution.Contains("Emailed + VM"))
     {
         text = "Formatting email....\n";
-        typeText(text, slowMode);
-        if (slowMode) Thread.Sleep(delay);
 
-        text = @$"Hi {account.FirstName},
+        try
+        {
+            text = File.ReadAllText("../Program/wellness_check_email.txt");
+        }
+        catch (Exception e)
+        {
+            Console.ForegroundColor = error;
+            Console.WriteLine(e.Message);
+            Console.ResetColor();
+        }
 
-We recently installed your IQ Fiber service and tried giving you a call but reached your voicemail — so we wanted to follow up via email.
-
-    We reach out to our new customers proactively to make sure the installation went smoothly and to see if you have any questions or concerns.
-    Please let us know how your experience was and if you'd like us to follow up directly.
-    We truly value you as an IQ Fiber customer. 
-
-Again, welcome — we're excited to have you with us!
-
-Best regards,";
+        text = replaceText(text, account);
         results(debug, slowMode, delay, text);
+
     }
     #endregion
 }
@@ -503,3 +501,18 @@ void typeText(string text, bool slowMode)
         Console.Write(text);
     }
 }
+
+string replaceText(string text, Account account)
+{
+    text = text.Replace("#ACCNUM", account.AccountNumber.ToString());
+    text = text.Replace("#FNAME", account.FirstName);
+    text = text.Replace("#LNAME", account.LastName);
+    text = text.Replace("#PHONE", account.PhoneNumber);
+    text = text.Replace("#PLAN", account.Subsciption);
+    text = text.Replace("#PLACE", account.Address);
+    text = text.Replace("#TIME", account.reformatedInstallTime());
+    return text;
+}
+
+
+

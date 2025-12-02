@@ -19,3 +19,12 @@ git push origin main`
 
 </details>
 
+## List of keywords for generated messages ##
+
+#ACCNUM - AccountNumber (123456)
+#FNAME - FirstName      (John)
+#LNAME - LastName       (Doe)
+#PHONE - PhoneNumber    (123-456-7890)
+#SUB - Subsciption      (500Mbps. for $75/Month)
+#LOC - Address          (123 test, place, FL 12345, USA)
+#TIME - InstallTime     (Tuesday Nov. 25th, 11:00am - 2:00pm)
