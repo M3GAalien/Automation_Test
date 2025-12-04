@@ -8,7 +8,7 @@ using Gaiia_Automation_Test;
 
 bool debug = false; // SET FALSE BEFORE BUILDING - not allowed to do threads in github codespaces 
 bool slowMode = true; // add timed delays for *asthetic* reasons
-bool autoContinue = true; // auto continue to next prompt after delay.
+bool autoContinue = false; // auto continue to next prompt after delay.
 int delay = 2000; // delay to add in miliseconds
 
 
