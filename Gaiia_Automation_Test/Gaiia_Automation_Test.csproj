@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
-    <PackageReference Include="Microsoft.Office.Interop.Outlook" Version="15.0.4797.1004" />
+    <PackageReference Include="Microsoft.Office.Interop.Outlook" Version="12.0.4518.1014" />
     <PackageReference Include="textcopy" Version="6.2.1" />
   </ItemGroup>
 
