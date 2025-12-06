@@ -18,14 +18,14 @@ ConsoleColor success = ConsoleColor.Green;
 
 
 #region intro
-string text = "Checkout my github for documentation\n\n## https://github.com/M3GAalien/CodespaceTest ##\n\nPlease enter your name: ";
+string text = "this program does blah blah blah...\nyour name pls: ";
 typeText(text, slowMode);
 string agent = debug ? "Michael A" : Console.ReadLine() ?? "NO NAME";
 
-text = "\nSelect workflow";
+text = "\nWe doing precalls or wellness checks?";
 typeText(text, slowMode);
 Console.ForegroundColor = notification;
-Console.WriteLine("\n     (1) - Precall\n     (2) - Wellness Check");
+Console.WriteLine("\n     (1) - precall\n     (2) - wellness check");
 Console.ResetColor();
 string task = getChoice(2) switch
 {
@@ -37,7 +37,7 @@ string task = getChoice(2) switch
 
 #region get info from Excel
 if (slowMode) Thread.Sleep(delay);
-text = "\nPaste Excel data and press enter to continue:\n";
+text = "\nDrop the Excel pls good sir then press Enter to continue\n";
 typeText(text, slowMode);
 
 List<Account> accounts = new List<Account>();
@@ -81,7 +81,7 @@ foreach (Account a in accounts)
 
     if (task.Contains("wellness check"))
     {
-        createNewTicket(a);
+        startWFNewTicket(a);
     }
 
     do
@@ -681,7 +681,7 @@ void callCX(Account account)
     }
 }
 
-void createNewTicket(Account account)
+void startWFNewTicket(Account account)
 {
     autoOpenLink(@"https://app.gaiia.com/iq-fiber/accounts/" + account.AccountNumber + "/tickets/new");
 
