@@ -165,6 +165,7 @@ https://github.com/user-attachments/assets/7f45c960-e453-49ff-b295-fa04fe781192
 5. Open Program folder
 6. Run Gaiia_Automation_Test.exe
 
+https://github.com/user-attachments/assets/0101054a-d21f-41f5-af2e-b1726175b1b9
 
 ---
 
