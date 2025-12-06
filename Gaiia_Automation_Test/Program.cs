@@ -3,6 +3,7 @@ using System.Reflection;
 using TextCopy;
 using System.Diagnostics;
 using Gaiia_Automation_Test;
+using Outlook = Microsoft.Office.Interop.Outlook;
 
 
 
@@ -371,11 +372,15 @@ void precall(Account account)
     #region Send an email if necessary
     if (account.Resolution.Contains("Emailed"))
     {
+        var outlook = new Outlook.Application();
+        var mail = (Outlook.MailItem)outlook.CreateItem(Outlook.OlItemType.olMailItem);
+
         text = "Enter customers email\n";
         typeText(text, slowMode);
         Console.ForegroundColor = notification;
-        string to = Console.ReadLine() ?? "ERROR GETTING EMAIL";
-        string subject = "Welcome to the Fiberhood!";
+
+        mail.To = Console.ReadLine() ?? "ERROR GETTING EMAIL";
+        mail.Subject = "Welcome to the Fiberhood";
 
         text = "Formatting email....\n";
         typeText(text, slowMode);
@@ -393,17 +398,15 @@ void precall(Account account)
         }
 
         text = replaceText(text, account);
-        results(debug, text);
-        if (!debug)
+        if (debug)
         {
-            string mailto = $"mailto:{to}?subject={subject}&body={text}";
-            Process.Start(new ProcessStartInfo(mailto)
-            {
-                UseShellExecute = true
-            });
+            typeText(text, slowMode);
         }
-
-
+        else
+        {
+            mail.Body = text;
+            mail.Display();
+        }
     }
     #endregion
 }
