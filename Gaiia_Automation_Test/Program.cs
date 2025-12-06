@@ -291,7 +291,7 @@ bool goBack(string task, Account account)
 void precall(Account account)
 {
     autoOpenLink(@$"https://app.gaiia.com/iq-fiber/accounts/{account.AccountNumber}");
-    
+
     callCX(account);
 
     #region Copy note to leave in Gaiia
@@ -371,6 +371,12 @@ void precall(Account account)
     #region Send an email if necessary
     if (account.Resolution.Contains("Emailed"))
     {
+        text = "Enter customers email\n";
+        typeText(text, slowMode);
+        Console.ForegroundColor = notification;
+        string to = Console.ReadLine() ?? "ERROR GETTING EMAIL";
+        string subject = "Welcome to the Fiberhood!";
+
         text = "Formatting email....\n";
         typeText(text, slowMode);
         if (slowMode) Thread.Sleep(delay);
@@ -388,6 +394,17 @@ void precall(Account account)
 
         text = replaceText(text, account);
         results(debug, text);
+        if (!debug)
+        {
+            string mailto = $"mailto:{to}?subject={subject}&body={text}";
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = mailto,
+                UseShellExecute = true
+            });
+        }
+
+
     }
     #endregion
 }
@@ -406,7 +423,7 @@ void wellnessCheck(Account account)
     Console.ResetColor();
     form.accountIsActive = getChoice(2) == 1 ? true : false;
 
-    
+
     text = "Payment method on file\n";
     typeText(text, slowMode);
     Console.ForegroundColor = notification;
@@ -476,7 +493,7 @@ void wellnessCheck(Account account)
     typeText(text, slowMode);
     form.averageUtilization = Console.ReadLine() ?? "ERROR GETTING AVERAGE UTILIZATION\n";
 
-   text = "Noise Levels: ";
+    text = "Noise Levels: ";
     typeText(text, slowMode);
     form.noiseLevel = Console.ReadLine() ?? "ERROR GETTING NOISE LEVEL\n";
 
@@ -561,8 +578,8 @@ RESULT: DONE";
 
     #region fill out external comment
     text = "Formating external note for Gaiia ticket....\n";
-        typeText(text, slowMode);
-        if (slowMode) Thread.Sleep(delay);
+    typeText(text, slowMode);
+    if (slowMode) Thread.Sleep(delay);
 
     text = $"Hello {account.FirstName},\n";
     if (account.WellnessCheckResolution.Contains("Satisfied"))
