@@ -229,6 +229,7 @@ async void results(bool isInDebugMode, string text, bool autoContinue = false)
     
     Console.WriteLine("\nPress ENTER to continue");
     Console.ResetColor();
+    Console.ReadLine();
 }
 
 // add colors when displaying account info
