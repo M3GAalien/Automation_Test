@@ -291,7 +291,7 @@ bool goBack(string task, Account account)
 void precall(Account account)
 {
     autoOpenLink(@$"https://app.gaiia.com/iq-fiber/accounts/{account.AccountNumber}");
-    
+
     callCX(account);
 
     #region Copy note to leave in Gaiia
@@ -357,10 +357,10 @@ void precall(Account account)
                 break;
         }
 
-        text += $"the installation details:" +
-                "\n*\t{account.Address}" +
-                "\n*\t{account.reformatedInstallTime()}" +
-                "\n*\t{account.Subsciption}" +
+        text += "the installation details:" +
+                $"\n*\t{account.Address}" +
+                $"\n*\t{account.reformatedInstallTime()}" +
+                $"\n*\t{account.Subsciption}" +
                 "\n\nRESULT: Pending Installation";
         results(debug, text);
     }
@@ -377,7 +377,7 @@ void precall(Account account)
 
         try
         {
-            text = File.ReadAllText("../Program/precall_email.txt");
+            text = File.ReadAllText(@"../Program/Precall Scripts/precall_email.txt");
         }
         catch (Exception e)
         {
@@ -406,7 +406,44 @@ void wellnessCheck(Account account)
     Console.ResetColor();
     form.accountIsActive = getChoice(2) == 1 ? true : false;
 
+
+    // Cancel filling out form if account is not active
+    if (form.accountIsActive == false)
+    {
+        typeText("Why is the account not active?\n", slowMode);
+        Console.ForegroundColor = notification;
+        Console.WriteLine("\t(1) - Rescheduled\n\t(2) - Cancelled");
+        Console.ResetColor();
+
+        account.WellnessCheckStatus = getChoice(2) == 1 ? "Rescheduled" : "Cancelled";
+        
+        text = "Formating internal note for Gaiia ticket....\n";
+        typeText(text, slowMode);
+
+        if (account.WellnessCheckStatus == "Rescheduled")
+        {
+            text = @"ISSUE: INSTALL WELLNESS CHECK
+        
+ACTION: 
+    * Created ticket
+    * Account not active yet
     
+RESULT: Closing ticket";
+        }
+        else
+        {
+            text = @"ISSUE: INSTALL WELLNESS CHECK
+        
+ACTION: 
+    * Created ticket
+    * Customer cancelled service
+    
+RESULT: Closing ticket";
+        }
+        results(debug, text);
+        return;
+    }
+
     text = "Payment method on file\n";
     typeText(text, slowMode);
     Console.ForegroundColor = notification;
@@ -476,7 +513,7 @@ void wellnessCheck(Account account)
     typeText(text, slowMode);
     form.averageUtilization = Console.ReadLine() ?? "ERROR GETTING AVERAGE UTILIZATION\n";
 
-   text = "Noise Levels: ";
+    text = "Noise Levels: ";
     typeText(text, slowMode);
     form.noiseLevel = Console.ReadLine() ?? "ERROR GETTING NOISE LEVEL\n";
 
@@ -525,79 +562,82 @@ void wellnessCheck(Account account)
     #endregion
 
     #region fill out internal comment
-    if (account.WellnessCheckStatus != "Rescheduled" && account.WellnessCheckStatus != "Canceled")
-    {
-        text = "Formating interneal note for Gaiia ticket....\n";
-        typeText(text, slowMode);
-        if (slowMode) Thread.Sleep(delay);
+    text = "Formating internal note for Gaiia ticket....\n";
+    typeText(text, slowMode);
 
-        text = @$"ISSUE: INSTALL WELLNESS CHECK
+    text = @$"ISSUE: INSTALL WELLNESS CHECK
 Account status:
-*   {(form.accountIsActive == true ? "ACTIVE" : "INACTIVE")}
-*   {(form.hasPaymentMethod == true ? "Payment method on file" : "No payment on file")}
+    *   {(form.accountIsActive == true ? "ACTIVE" : "INACTIVE")}
+    *   {(form.hasPaymentMethod == true ? "Payment method on file" : "No payment on file")}
 
 Triage:
-WORKORDER
-*   has Wi-Fi Man: {(form.hasWIFIMan == true ? "Yes" : "No")}
-*   has tech notes: {(form.hasTechNotes == true ? "Yes" : "No")}
+    WORKORDER
+    *   has Wi-Fi Man: {(form.hasWIFIMan == true ? "Yes" : "No")}
+    *   has tech notes: {(form.hasTechNotes == true ? "Yes" : "No")}
 
-PONMON
-*   Light Levels: {form.lightLevels}
-*   Errors on Service: {form.errorsOnService}
+    PONMON
+    *   Light Levels: {form.lightLevels}
+    *   Errors on Service: {form.errorsOnService}
 
-ROUTER
-*   Channel Utilization: {form.channelUtilization}
-*   Average Utilization: {form.averageUtilization}
-*   Noise Level: {form.noiseLevel}
+    ROUTER
+    *   Channel Utilization: {form.channelUtilization}
+    *   Average Utilization: {form.averageUtilization}
+    *   Noise Level: {form.noiseLevel}
 
 CUSTOMER FEEDBACK
-*   {form.customerFeedback}
+    *   {form.customerFeedback}
 
 RESULT: DONE";
 
-        results(debug, text);
-    }
+    results(debug, text);
     #endregion
 
     #region fill out external comment
     text = "Formating external note for Gaiia ticket....\n";
-        typeText(text, slowMode);
-        if (slowMode) Thread.Sleep(delay);
+    typeText(text, slowMode);
 
-    text = $"Hello {account.FirstName},\n";
     if (account.WellnessCheckResolution.Contains("Satisfied"))
     {
-        text += @"It was a pleasure speaking with you today.
-Thank you for sharing your feedback on the installation—we truly appreciate your input. 
-Please know that our team is available 24/7 should you need any assistance or support in the future. 
-You can reach us anytime by creating a new ticket in the customer portal or by phone.
-
-Have a wonderful day!";
+        try
+        {
+            text = File.ReadAllText(@"../Program/Wellness Check Scripts/contacted_customer.txt");
+        }
+        catch (Exception e)
+        {
+            Console.ForegroundColor = error;
+            Console.WriteLine(e.Message);
+            Console.ResetColor();
+        }
     }
 
     if (account.WellnessCheckResolution.Contains("Emailed + VM"))
     {
-        text += @"Welcome to the Fiberhood!
-Unfortunately, it appears we were unable to reach you via phone call to hear about your 
-installation experience with us and ensure your service is living up to our high expectations. 
-Please know that our team is available 24/7 should you need any assistance or support. 
-
-Have a wonderful day!";
+        try
+        {
+            text = File.ReadAllText(@"../Program/Wellness Check Scripts/non_contact_customer.txt");
+        }
+        catch (Exception e)
+        {
+            Console.ForegroundColor = error;
+            Console.WriteLine(e.Message);
+            Console.ResetColor();
+        }
     }
 
     if (account.WellnessCheckStatus.Contains("Service Call"))
     {
-        text += @"It was a pleasure speaking with you today.
-Thank you for sharing your feedback on the installation—we truly appreciate your input. 
-We are disappointed to hear about those challenges with your new service, and are dedicated
-to addressing these concerns.
-
-As the next step, a follow-up appointment with a technician has been scheduled.
-We appreciate the opportunity to make this right and look forward to resolving your issue.
-
-Have a wonderful day!";
+        try
+        {
+            text = File.ReadAllText(@"../Program/Wellness Check Scripts/service_call.txt");
+        }
+        catch (Exception e)
+        {
+            Console.ForegroundColor = error;
+            Console.WriteLine(e.Message);
+            Console.ResetColor();
+        }
     }
-    results(debug, text);
+    text = replaceText(text, account);
     #endregion
 
 }
@@ -653,7 +693,6 @@ void callCX(Account account)
 {
     text = "\nGetting phone number....\n";
     typeText(text, slowMode);
-    if (slowMode) Thread.Sleep(delay);
     text = account.PhoneNumber;
 
     if (string.IsNullOrWhiteSpace(text))

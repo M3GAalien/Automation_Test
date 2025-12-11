@@ -1,0 +1,11 @@
+Hello #FNAME,
+
+It was a pleasure speaking with you today.
+Thank you for sharing your feedback on the installation—we truly appreciate your input. 
+We are disappointed to hear about those challenges with your new service, and are dedicated
+to addressing these concerns.
+
+As the next step, a follow-up appointment with a technician has been scheduled.
+We appreciate the opportunity to make this right and look forward to resolving your issue.
+
+Have a wonderful day!

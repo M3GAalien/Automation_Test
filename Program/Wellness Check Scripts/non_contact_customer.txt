@@ -1,0 +1,8 @@
+Hello #FNAME,
+
+Welcome to the Fiberhood!
+Unfortunately, it appears we were unable to reach you via phone call to hear about your 
+installation experience with us and ensure your service is living up to our high expectations. 
+Please know that our team is available 24/7 should you need any assistance or support. 
+
+Have a wonderful day!
