@@ -620,7 +620,7 @@ CUSTOMER FEEDBACK
 
 RESULT: DONE";
 
-    results(debug, text);
+    results(debug, text, autoContinue);
     #endregion
 
     #region fill out external comment
@@ -669,6 +669,7 @@ RESULT: DONE";
         }
     }
     text = replaceText(text, account);
+    results(debug, text, autoContinue);
     #endregion
 
 }
