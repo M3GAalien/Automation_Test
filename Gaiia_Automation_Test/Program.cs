@@ -253,7 +253,7 @@ void printAccountInfo(Account a)
     printField("NAME", $"{a.FirstName} {a.LastName}");
     printField("ADDRESS", a.Address);
     printField("INSTALL TIME", a.reformatedInstallTime());
-    if (string.IsNullOrWhiteSpace(a.Subsciption))
+    if (string.IsNullOrWhiteSpace(a.reformatedSubscription()))
     {
         Console.ForegroundColor = error;
         Console.WriteLine("\tError getting subsciption." +
@@ -262,7 +262,7 @@ void printAccountInfo(Account a)
     }
     else
     {
-        printField("SUBSCRIPTION", a.Subsciption);
+        printField("SUBSCRIPTION", a.reformatedSubscription());
     }
 
     void writeBorder(char borderCharacter = '#', int borderLength = 45)
@@ -391,7 +391,7 @@ void precall(Account account)
         text += "the installation details:" +
                 $"\n*\t{account.Address}" +
                 $"\n*\t{account.reformatedInstallTime()}" +
-                $"\n*\t{account.Subsciption}" +
+                $"\n*\t{account.reformatedSubscription()}" +
                 "\n\nRESULT: Pending Installation";
         results(debug, text);
     }
@@ -698,7 +698,7 @@ string replaceText(string text, Account account)
     text = text.Replace("#FNAME", account.FirstName);
     text = text.Replace("#LNAME", account.LastName);
     text = text.Replace("#PHONE", account.PhoneNumber);
-    text = text.Replace("#PLAN", account.Subsciption);
+    text = text.Replace("#PLAN", account.reformatedSubscription());
     text = text.Replace("#PLACE", account.Address);
     text = text.Replace("#TIME", account.reformatedInstallTime());
     return text;

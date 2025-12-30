@@ -6,7 +6,7 @@ public class Account
     public string FirstName;
     public string LastName;
     public string PhoneNumber;
-    public string Subsciption;
+    public string Subscription;
     public string Address;
     public string InstallTime;
     public string Resolution;
@@ -23,7 +23,7 @@ public class Account
         FirstName = accountInfo[1];
         LastName = accountInfo[2];
         PhoneNumber = accountInfo[3];
-        Subsciption = reformatSubscription(accountInfo[4]);
+        Subscription = accountInfo[4];
         Address = accountInfo[5];
         InstallTime = accountInfo[6];
         Resolution = task.Contains("precall") ? "" : accountInfo[7];
@@ -34,7 +34,7 @@ public class Account
 
     public override string ToString()
     {
-        return @$"{AccountNumber} {FirstName} {LastName} {PhoneNumber} {Subsciption} 
+        return @$"{AccountNumber} {FirstName} {LastName} {PhoneNumber} {Subscription} 
         {Address}
         {InstallTime} 
         {Resolution} {CXLorRS} 
@@ -73,31 +73,31 @@ public class Account
         return day + "th";
     }
 
-    private string reformatSubscription(string plan)
+    public string reformatedSubscription()
     {
-        if (plan.Contains("250"))
+        if (Subscription.Contains("250"))
         {
             return "250Mbps. for $65/Month";
         }
-        if (plan.Contains("500"))
+        if (Subscription.Contains("500"))
         {
             return "500Mbps. for $75/Month";
         }
-        if (plan.Contains("1"))
+        if (Subscription.Contains("1"))
         {
-            if (plan.ToLower().Contains("pro"))
+            if (Subscription.ToLower().Contains("pro"))
             {
                 return "1 Gig. Pro for $150/Month";
             }
             return "1 Gig. for $85/Month";
         }
-        if (plan.Contains("2"))
+        if (Subscription.Contains("2"))
         {
             return "2 Gig. for $95/Month";
         }
-        if (plan.Contains("5"))
+        if (Subscription.Contains("5"))
         {
-            if (plan.ToLower().Contains("pro"))
+            if (Subscription.ToLower().Contains("pro"))
             {
                 return "5 Gig. Pro for $250/Month";
             }
